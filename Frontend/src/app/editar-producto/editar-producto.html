@@ -1,42 +1,64 @@
-<div style="padding: 20px;">
-  <h2>Editar Producto</h2>
+<div class="container mt-4">
 
-  <form [formGroup]="productoForm" (ngSubmit)="guardarCambios()">
+  <div class="card shadow p-4">
     
-    <div style="margin-bottom: 15px;">
-      <label>Nombre:</label><br>
-      <input type="text" formControlName="nombre">
-    </div>
+    <h3 class="text-center mb-4">✏️ Editar Producto</h3>
 
-    <div style="margin-bottom: 15px;">
-      <label>Descripción:</label><br>
-      <textarea formControlName="descripcion"></textarea>
-    </div>
+    <form [formGroup]="productoForm" (ngSubmit)="guardarCambios()">
 
-    <div style="margin-bottom: 15px;">
-      <label>Precio:</label><br>
-      <input type="number" formControlName="precio" step="0.01">
-    </div>
+      <div class="mb-3">
+        <label class="form-label">Nombre</label>
+        <input type="text" class="form-control" formControlName="nombre">
+      </div>
 
-    <div style="margin-bottom: 15px;">
-      <label>Stock:</label><br>
-      <input type="number" formControlName="stock">
-    </div>
+      <div class="mb-3">
+        <label class="form-label">Descripción</label>
+        <textarea class="form-control" formControlName="descripcion"></textarea>
+      </div>
 
-    <div style="margin-bottom: 15px;">
-      <label>ID Categoría:</label><br>
-      <input type="number" formControlName="categoria_id">
-    </div>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Precio</label>
+          <input type="number" class="form-control" formControlName="precio">
+        </div>
 
-    <div style="margin-bottom: 15px;">
-      <label>URL de la Imagen:</label><br>
-      <input type="text" formControlName="imagen">
-    </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Stock</label>
+          <input type="number" class="form-control" formControlName="stock">
+        </div>
+      </div>
 
-    <div style="margin-top: 20px;">
-      <button type="submit" [disabled]="productoForm.invalid">Guardar</button>
-      <button type="button" routerLink="/">Cancelar</button>
-    </div>
+      <div class="mb-3">
+        <label class="form-label">Categoría</label>
+        <input type="number" class="form-control" formControlName="categoria_id">
+      </div>
 
-  </form>
+      <div class="mb-3">
+        <label class="form-label">URL de Imagen</label>
+        <input type="text" class="form-control" formControlName="imagen">
+      </div>
+
+      <!-- BOTONES -->
+      <div class="d-flex justify-content-between mt-4">
+
+        <button 
+          type="button" 
+          class="btn btn-secondary"
+          routerLink="/">
+          Cancelar
+        </button>
+
+        <button 
+          type="submit" 
+          class="btn btn-success"
+          [disabled]="productoForm.invalid">
+          💾 Guardar
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
 </div>

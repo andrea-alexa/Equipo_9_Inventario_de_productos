@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-
 
 export interface Producto {
   id: number;
@@ -13,57 +13,70 @@ export interface Producto {
   imagen: string;
 }
 
-
 @Component({
   selector: 'app-lista-productos',
   standalone: true,
-  imports: [RouterLink, FormsModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './lista-productos.html',
   styleUrls: ['./lista-productos.css']
 })
-
-@Component({
-  selector: 'app-lista-productos',
-  standalone: true,
-
-  imports: [FormsModule], 
-  templateUrl: './lista-productos.html',
-  styleUrl: './lista-productos.css'
-})
-export class ListaProductosComponent {
-  
+export class ListaProductosComponent implements OnInit {
 
   productos: Producto[] = [];
 
-
   nuevoNombre: string = '';
   nuevoPrecio: number = 0;
+  nuevaDescripcion: string = '';
+  nuevoStock: number = 0;
+  nuevaCategoria: number = 1;
+  nuevaImagen: string = '';
 
+  ngOnInit() {
+    const data = localStorage.getItem('productos');
+    if (data) {
+      this.productos = JSON.parse(data);
+    }
+  }
 
+  guardarEnLocalStorage() {
+    localStorage.setItem('productos', JSON.stringify(this.productos));
+  }
+
+  // Agregar producto
   agregarProducto() {
-
     if (this.nuevoNombre.trim() !== '' && this.nuevoPrecio > 0) {
-      
-      // Calculamos un nuevo ID automático
-      const nuevoId = this.productos.length > 0 
-        ? Math.max(...this.productos.map(p => p.id)) + 1 
+
+      const nuevoId = this.productos.length > 0
+        ? Math.max(...this.productos.map(p => p.id)) + 1
         : 1;
 
+      this.productos.push({
+        id: nuevoId,
+        nombre: this.nuevoNombre,
+        precio: this.nuevoPrecio,
+        descripcion: this.nuevaDescripcion,
+        stock: this.nuevoStock,
+        categoria_id: this.nuevaCategoria,
+        imagen: this.nuevaImagen
+      });
 
-this.productos.push({
-  id: nuevoId,
-  nombre: this.nuevoNombre,
-  precio: this.nuevoPrecio,
-  descripcion: '',
-  stock: 0,       
-  categoria_id: 1, 
-  imagen: ''       
-});
+      this.guardarEnLocalStorage(); // GUARDAR
 
       this.nuevoNombre = '';
       this.nuevoPrecio = 0;
+      this.nuevaDescripcion = '';
+      this.nuevoStock = 0;
+      this.nuevaCategoria = 1;
+      this.nuevaImagen = '';
+
     } else {
       alert('Por favor, ingresa un nombre válido y un precio mayor a 0');
     }
+  }
+
+  // Eliminar producto
+  eliminarProducto(id: number) {
+    this.productos = this.productos.filter(p => p.id !== id);
+    this.guardarEnLocalStorage(); // GUARDAR
   }
 }

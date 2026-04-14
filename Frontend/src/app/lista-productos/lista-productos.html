@@ -1,37 +1,126 @@
-<div class="contenedor">
-  <h2>Listado de Productos</h2>
+<div class="container mt-4">
 
-  <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
-    <h3>Agregar Nuevo Producto</h3>
-    
-    <input 
-      type="text" 
-      placeholder="Ej: Monitor 24 pulgadas" 
-      [(ngModel)]="nuevoNombre"
-      style="margin-right: 10px; padding: 5px;"
-    >
-    
-    <input 
-      type="number" 
-      placeholder="Precio" 
-      [(ngModel)]="nuevoPrecio"
-      style="margin-right: 10px; padding: 5px;"
-    >
-    
-    <button (click)="agregarProducto()" style="padding: 5px 15px; cursor: pointer;">
-      Agregar
-    </button>
+  <h2 class="text-center mb-4">📦 Inventario de Productos</h2>
+
+  <!-- FORMULARIO -->
+  <div class="card shadow p-4 mb-4">
+    <h4 class="mb-4">➕ Agregar Producto</h4>
+
+    <div class="mb-3">
+      <label class="form-label">Nombre</label>
+      <input type="text" class="form-control" [(ngModel)]="nuevoNombre">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Descripción</label>
+      <textarea class="form-control" [(ngModel)]="nuevaDescripcion"></textarea>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Precio</label>
+        <input type="number" class="form-control" [(ngModel)]="nuevoPrecio">
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Stock</label>
+        <input type="number" class="form-control" [(ngModel)]="nuevoStock">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Categoría</label>
+      <select class="form-select" [(ngModel)]="nuevaCategoria">
+        <option value="" disabled selected>Seleccionar categoría</option>
+        <option value="1">💻 Electrónica</option>
+        <option value="2">👕 Ropa</option>
+        <option value="3">🏠 Hogar</option>
+        <option value="4">⚽ Deportes</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">URL de Imagen</label>
+      <input type="text" class="form-control" [(ngModel)]="nuevaImagen">
+    </div>
+
+    <div class="text-end">
+      <button class="btn btn-primary" (click)="agregarProducto()">
+        Agregar Producto
+      </button>
+    </div>
   </div>
 
-  <ul>
-    @for (producto of productos; track producto.id) {
-      <li>
-        <strong>{{ producto.nombre }}</strong> - ${{ producto.precio }}
-      </li>
-    } @empty {
-      <div style="color: red; margin-top: 10px;">
-        ⚠️ Advertencia: Actualmente no hay productos registrados en el inventario.
+  <!-- LISTA -->
+  <hr class="my-4">
+
+  <h4 class="mb-3">🛍️ Productos disponibles</h4>
+
+  <div class="row">
+
+    <div *ngFor="let producto of productos" class="col-md-4 mb-4">
+
+      <div class="card h-100 shadow-sm">
+
+        <!-- IMAGEN -->
+        <img *ngIf="producto.imagen" [src]="producto.imagen" class="card-img-top"
+          style="height: 180px; object-fit: cover;" alt="Imagen producto">
+
+        <!-- CONTENIDO -->
+        <div class="card-body">
+
+          <h5 class="card-title">{{ producto.nombre }}</h5>
+
+          <p class="card-text text-muted">
+            {{ producto.descripcion || 'Sin descripción' }}
+          </p>
+
+          <p class="mb-1">
+            💲Precio: <strong>{{ producto.precio }}</strong>
+          </p>
+
+          <p class="mb-1">
+            📦 Stock: {{ producto.stock }}
+          </p>
+
+          <p class="mb-2">
+            🏷️ Categoría:
+            {{
+            producto.categoria_id === 1 ? '💻 Electrónica' :
+            producto.categoria_id === 2 ? '👕 Ropa' :
+            producto.categoria_id === 3 ? '🏠 Hogar' :
+            producto.categoria_id === 4 ? '⚽ Deportes' :
+            'Sin categoría'
+            }}
+          </p>
+
+        </div>
+
+        <!-- BOTONES -->
+        <div class="card-footer d-flex justify-content-between">
+
+          <button class="btn btn-danger btn-sm" (click)="eliminarProducto(producto.id)">
+            Eliminar
+          </button>
+
+          <button class="btn btn-warning btn-sm" [routerLink]="['/editar', producto.id]">
+            Editar
+          </button>
+
+        </div>
+
       </div>
-    }
-  </ul>
+
+    </div>
+
+  </div>
+
+  <!-- MENSAJE -->
+  <div *ngIf="productos.length === 0"
+    class="d-flex flex-column justify-content-center align-items-center text-center mt-5" style="min-height: 350px;">
+
+    <h4 class="text-muted">📦 Inventario vacío</h4>
+    <p class="text-secondary">Agrega tu primer producto</p>
+
+  </div>
 </div>

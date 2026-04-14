@@ -1,26 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ProductoService } from '../producto'; 
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-editar-producto',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink], 
-  templateUrl: './editar-producto.html', 
-  styleUrls: ['./editar-producto.css']   
+  imports: [ReactiveFormsModule, RouterLink, CommonModule],
+  templateUrl: './editar-producto.html',
+  styleUrls: ['./editar-producto.css']
 })
 export class EditarProductoComponent implements OnInit {
+
   productoForm: FormGroup;
   productoId!: number;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
-    private productoService: ProductoService
+    private router: Router
   ) {
-  
+
     this.productoForm = this.fb.group({
       nombre: ['', Validators.required],
       descripcion: [''],
@@ -34,35 +34,35 @@ export class EditarProductoComponent implements OnInit {
   ngOnInit(): void {
     this.productoId = Number(this.route.snapshot.paramMap.get('id'));
 
-    if (this.productoId) {
-      this.productoService.obtenerProducto(this.productoId).subscribe({
-        next: (producto) => {
+    const data = localStorage.getItem('productos');
+    if (data) {
+      const productos = JSON.parse(data);
+      const producto = productos.find((p: any) => p.id === this.productoId);
 
-          this.productoForm.patchValue({
-            nombre: producto.nombre,
-            descripcion: producto.descripcion,
-            precio: producto.precio,
-            stock: producto.stock,
-            categoria_id: producto.categoria_id,
-            imagen: producto.imagen
-          });
-        },
-        error: (err) => console.error('Error al cargar el producto', err)
-      });
+      if (producto) {
+        this.productoForm.patchValue(producto);
+      }
     }
   }
 
   guardarCambios(): void {
     if (this.productoForm.valid) {
-      this.productoService.actualizarProducto(this.productoId, this.productoForm.value)
-        .subscribe({
-          next: () => {
-            alert('Producto actualizado correctamente');
-          
-            this.router.navigate(['/']); 
-          },
-          error: (err) => console.error('Error al guardar', err)
-        });
+
+      const data = localStorage.getItem('productos');
+      if (data) {
+        let productos = JSON.parse(data);
+
+        productos = productos.map((p: any) =>
+          p.id === this.productoId
+            ? { ...p, ...this.productoForm.value }
+            : p
+        );
+
+        localStorage.setItem('productos', JSON.stringify(productos));
+      }
+
+      alert('Producto actualizado correctamente');
+      this.router.navigate(['/']);
     }
   }
 }
