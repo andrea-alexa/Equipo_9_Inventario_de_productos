@@ -1,0 +1,42 @@
+<div style="padding: 20px;">
+  <h2>Editar Producto</h2>
+
+  <form [formGroup]="productoForm" (ngSubmit)="guardarCambios()">
+    
+    <div style="margin-bottom: 15px;">
+      <label>Nombre:</label><br>
+      <input type="text" formControlName="nombre">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label>Descripción:</label><br>
+      <textarea formControlName="descripcion"></textarea>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label>Precio:</label><br>
+      <input type="number" formControlName="precio" step="0.01">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label>Stock:</label><br>
+      <input type="number" formControlName="stock">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label>ID Categoría:</label><br>
+      <input type="number" formControlName="categoria_id">
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <label>URL de la Imagen:</label><br>
+      <input type="text" formControlName="imagen">
+    </div>
+
+    <div style="margin-top: 20px;">
+      <button type="submit" [disabled]="productoForm.invalid">Guardar</button>
+      <button type="button" routerLink="/">Cancelar</button>
+    </div>
+
+  </form>
+</div>
