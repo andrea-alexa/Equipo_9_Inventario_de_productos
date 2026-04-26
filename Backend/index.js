@@ -1,13 +1,25 @@
 const express = require('express');
 const cors = require('cors');
-const db = require('./db');
+require('dotenv').config();
+
+const productosRoutes = require('./routes/productos');
+const categoriasRoutes = require('./routes/categorias');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+// Rutas
+app.use('/productos', productosRoutes);
+app.use('/categorias', categoriasRoutes);
 
-app.listen(3000, () => {
-  console.log('Servidor en puerto 3000');
+// Ruta de prueba
+app.get('/', (req, res) => {
+  res.json({ mensaje: 'API de Inventario funcionando' });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
