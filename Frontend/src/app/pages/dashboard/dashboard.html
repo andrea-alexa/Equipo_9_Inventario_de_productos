@@ -1,0 +1,42 @@
+<div class="container mt-4">
+
+  <h2 class="text-center mb-4">📊 Dashboard</h2>
+
+  <!-- TARJETAS DE RESUMEN -->
+  <div class="row mb-4">
+
+    <div class="col-md-4 mb-3">
+      <div class="card text-white bg-primary shadow text-center p-3">
+        <h5 class="card-title">📦 Total Productos</h5>
+        <h2>{{ totalProductos }}</h2>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card text-white bg-success shadow text-center p-3">
+        <h5 class="card-title">🏷️ Categorías</h5>
+        <h2>{{ totalCategorias }}</h2>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card text-white bg-danger shadow text-center p-3">
+        <h5 class="card-title">⚠️ Stock Bajo</h5>
+        <h2>{{ stockBajo }}</h2>
+        <small>Menos de 5 unidades</small>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ACCIONES RAPIDAS -->
+  <div class="card shadow p-4">
+    <h5 class="mb-3">⚡ Acciones rápidas</h5>
+    <div class="d-flex gap-3">
+      <a routerLink="/productos" class="btn btn-primary">
+        📦 Ver Inventario
+      </a>
+    </div>
+  </div>
+
+</div>

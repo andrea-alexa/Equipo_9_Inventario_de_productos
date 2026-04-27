@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ProductoService } from '../../../../features/productos/services/producto';
+import { CategoriaService, Categoria } from '../../../../features/categorias/services/categoria';
 
 @Component({
   selector: 'app-editar-producto',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, CommonModule],
+  imports: [ReactiveFormsModule, RouterLink, CommonModule, FormsModule],
   templateUrl: './editar-producto.html',
   styleUrls: ['./editar-producto.css']
 })
@@ -14,13 +17,15 @@ export class EditarProductoComponent implements OnInit {
 
   productoForm: FormGroup;
   productoId!: number;
+  categorias: Categoria[] = [];
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private productoService: ProductoService,
+    private categoriaService: CategoriaService
   ) {
-
     this.productoForm = this.fb.group({
       nombre: ['', Validators.required],
       descripcion: [''],
@@ -34,35 +39,21 @@ export class EditarProductoComponent implements OnInit {
   ngOnInit(): void {
     this.productoId = Number(this.route.snapshot.paramMap.get('id'));
 
-    const data = localStorage.getItem('productos');
-    if (data) {
-      const productos = JSON.parse(data);
-      const producto = productos.find((p: any) => p.id === this.productoId);
+    this.categoriaService.obtenerCategorias().subscribe(categorias => {
+      this.categorias = categorias;
+    });
 
-      if (producto) {
-        this.productoForm.patchValue(producto);
-      }
-    }
+    this.productoService.obtenerProducto(this.productoId).subscribe(producto => {
+      this.productoForm.patchValue(producto);
+    });
   }
 
   guardarCambios(): void {
     if (this.productoForm.valid) {
-
-      const data = localStorage.getItem('productos');
-      if (data) {
-        let productos = JSON.parse(data);
-
-        productos = productos.map((p: any) =>
-          p.id === this.productoId
-            ? { ...p, ...this.productoForm.value }
-            : p
-        );
-
-        localStorage.setItem('productos', JSON.stringify(productos));
-      }
-
-      alert('Producto actualizado correctamente');
-      this.router.navigate(['/']);
+      this.productoService.actualizarProducto(this.productoId, this.productoForm.value).subscribe(() => {
+        alert('Producto actualizado correctamente');
+        this.router.navigate(['/productos']);
+      });
     }
   }
 }
