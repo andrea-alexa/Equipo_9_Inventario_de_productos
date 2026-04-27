@@ -1,39 +1,57 @@
-<div class="container mt-4">
+<div class="container py-5">
 
-  <h2 class="text-center mb-4">📊 Dashboard</h2>
+  <div class="mb-5">
+    <h2 class="fw-bold mb-1" style="color: #e2e8f0;">Dashboard</h2>
+    <p style="color: #718096;">Resumen general del inventario</p>
+  </div>
 
-  <!-- TARJETAS DE RESUMEN -->
-  <div class="row mb-4">
+  <!-- TARJETAS -->
+  <div class="row mb-5">
 
     <div class="col-md-4 mb-3">
-      <div class="card text-white bg-primary shadow text-center p-3">
-        <h5 class="card-title">📦 Total Productos</h5>
-        <h2>{{ totalProductos }}</h2>
+      <div class="card p-4 h-100" style="border-left: 4px solid #6366f1 !important;">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <p class="mb-1" style="color: #718096; font-size: 0.875rem;">Total Productos</p>
+            <h2 class="fw-bold mb-0" style="color: #6366f1;">{{ totalProductos }}</h2>
+          </div>
+          <div style="font-size: 2.5rem;">📦</div>
+        </div>
       </div>
     </div>
 
     <div class="col-md-4 mb-3">
-      <div class="card text-white bg-success shadow text-center p-3">
-        <h5 class="card-title">🏷️ Categorías</h5>
-        <h2>{{ totalCategorias }}</h2>
+      <div class="card p-4 h-100" style="border-left: 4px solid #10b981 !important;">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <p class="mb-1" style="color: #718096; font-size: 0.875rem;">Categorías</p>
+            <h2 class="fw-bold mb-0" style="color: #10b981;">{{ totalCategorias }}</h2>
+          </div>
+          <div style="font-size: 2.5rem;">🏷️</div>
+        </div>
       </div>
     </div>
 
     <div class="col-md-4 mb-3">
-      <div class="card text-white bg-danger shadow text-center p-3">
-        <h5 class="card-title">⚠️ Stock Bajo</h5>
-        <h2>{{ stockBajo }}</h2>
-        <small>Menos de 5 unidades</small>
+      <div class="card p-4 h-100" style="border-left: 4px solid #ef4444 !important;">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <p class="mb-1" style="color: #718096; font-size: 0.875rem;">Stock Bajo</p>
+            <h2 class="fw-bold mb-0" style="color: #ef4444;">{{ stockBajo }}</h2>
+            <small style="color: #718096;">Menos de 5 unidades</small>
+          </div>
+          <div style="font-size: 2.5rem;">⚠️</div>
+        </div>
       </div>
     </div>
 
   </div>
 
-  <!-- ACCIONES RAPIDAS -->
-  <div class="card shadow p-4">
-    <h5 class="mb-3">⚡ Acciones rápidas</h5>
+  <!-- ACCIONES RÁPIDAS -->
+  <div class="card p-4">
+    <h5 class="fw-semibold mb-3" style="color: #e2e8f0;">Acciones rápidas</h5>
     <div class="d-flex gap-3">
-      <a routerLink="/productos" class="btn btn-primary">
+      <a routerLink="/productos" class="btn btn-primary px-4">
         📦 Ver Inventario
       </a>
     </div>

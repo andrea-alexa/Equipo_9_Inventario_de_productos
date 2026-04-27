@@ -21,7 +21,7 @@ export class ListaProductosComponent implements OnInit {
   nuevoPrecio: number = 0;
   nuevaDescripcion: string = '';
   nuevoStock: number = 0;
-  nuevaCategoria: number = 1;
+  nuevaCategoria: number = 0;
   nuevaImagen: string = '';
 
   constructor(
@@ -66,7 +66,7 @@ export class ListaProductosComponent implements OnInit {
         this.nuevoPrecio = 0;
         this.nuevaDescripcion = '';
         this.nuevoStock = 0;
-        this.nuevaCategoria = 1;
+        this.nuevaCategoria = 0;
         this.nuevaImagen = '';
       });
 
