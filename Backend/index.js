@@ -4,15 +4,20 @@ require('dotenv').config();
 
 const productosRoutes = require('./routes/productos');
 const categoriasRoutes = require('./routes/categorias');
+const authRoutes = require('./routes/auth');
+const verificarToken = require('./middleware/auth.middleware');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-// Rutas
-app.use('/productos', productosRoutes);
-app.use('/categorias', categoriasRoutes);
+// Rutas públicas
+app.use('/auth', authRoutes);
+
+// Rutas protegidas
+app.use('/productos', verificarToken, productosRoutes);
+app.use('/categorias', verificarToken, categoriasRoutes);
 
 // Ruta de prueba
 app.get('/', (req, res) => {
