@@ -21,7 +21,7 @@ app.use('/categorias', verificarToken, categoriasRoutes);
 
 // Ruta de prueba
 app.get('/', (req, res) => {
-  res.json({ mensaje: 'API de Inventario funcionando ✅' });
+  res.json({ mensaje: 'API de Inventario funcionando' });
 });
 
 const PORT = process.env.PORT || 3000;
