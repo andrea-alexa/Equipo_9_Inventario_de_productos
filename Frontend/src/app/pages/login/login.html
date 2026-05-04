@@ -1,0 +1,33 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center" style="background-color: #0f1117;">
+  <div class="col-md-4">
+
+    <div class="text-center mb-4">
+      <h1 style="color: #6366f1; font-size: 2rem;">📦</h1>
+      <h2 class="fw-bold" style="color: #e2e8f0;">Inventario</h2>
+      <p style="color: #718096;">Inicia sesión para continuar</p>
+    </div>
+
+    <div class="card p-4">
+
+      <div *ngIf="error" class="alert mb-3" style="background-color: #2d1a1a; color: #ef4444; border: 1px solid #ef4444; border-radius: 8px;">
+        {{ error }}
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" [(ngModel)]="email" placeholder="correo@ejemplo.com">
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label">Contraseña</label>
+        <input type="password" class="form-control" [(ngModel)]="password" placeholder="••••••••">
+      </div>
+
+      <button class="btn btn-primary w-100" (click)="iniciarSesion()" [disabled]="cargando">
+        {{ cargando ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
+      </button>
+
+    </div>
+
+  </div>
+</div>
