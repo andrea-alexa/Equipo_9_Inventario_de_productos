@@ -63,7 +63,7 @@
 
         <!-- IMAGEN -->
         <img *ngIf="producto.imagen" [src]="producto.imagen"
-          class="card-img-top" style="height: 180px; object-fit: cover; border-radius: 12px 12px 0 0;"
+          class="card-img-top" style="height: 180px; object-fit: contain; background-color: #0f1117; border-radius: 12px 12px 0 0;"
           alt="Imagen producto">
 
         <div *ngIf="!producto.imagen"
