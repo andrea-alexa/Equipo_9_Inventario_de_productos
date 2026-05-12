@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../features/auth/services/auth';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,6 @@ import { AuthService } from '../../features/auth/services/auth';
 export class LoginComponent {
   email: string = '';
   password: string = '';
-  error: string = '';
   cargando: boolean = false;
 
   constructor(
@@ -24,12 +24,18 @@ export class LoginComponent {
 
   iniciarSesion(): void {
     if (!this.email || !this.password) {
-      this.error = 'Por favor ingresa tu email y contraseña';
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campos incompletos',
+        text: 'Por favor ingresa tu email y contraseña',
+        background: '#1a1d27',
+        color: '#e2e8f0',
+        confirmButtonColor: '#6366f1'
+      });
       return;
     }
 
     this.cargando = true;
-    this.error = '';
 
     this.authService.login(this.email, this.password).subscribe({
       next: (res) => {
@@ -37,8 +43,15 @@ export class LoginComponent {
         this.router.navigate(['/dashboard']);
       },
       error: () => {
-        this.error = 'Credenciales incorrectas, intenta de nuevo';
         this.cargando = false;
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al iniciar sesión',
+          text: 'Credenciales incorrectas, intenta de nuevo',
+          background: '#1a1d27',
+          color: '#e2e8f0',
+          confirmButtonColor: '#6366f1'
+        });
       }
     });
   }
