@@ -2,7 +2,7 @@
   <div class="container">
 
     <a class="navbar-brand fw-bold" routerLink="/dashboard" style="color: #6366f1; font-size: 1.2rem;">
-      Inventario
+      📦 Inventario
     </a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -15,6 +15,7 @@
 
         <li class="nav-item">
           <a class="nav-link px-3 py-2 rounded" routerLink="/dashboard" routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{ exact: true }"
             style="color: #a0aec0; transition: all 0.2s;">
             Dashboard
           </a>
@@ -24,6 +25,20 @@
           <a class="nav-link px-3 py-2 rounded" routerLink="/productos" routerLinkActive="active-link"
             style="color: #a0aec0; transition: all 0.2s;">
             Productos
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link px-3 py-2 rounded" routerLink="/categorias" routerLinkActive="active-link"
+            style="color: #a0aec0; transition: all 0.2s;">
+            Categorías
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link px-3 py-2 rounded" routerLink="/historial" routerLinkActive="active-link"
+            style="color: #a0aec0; transition: all 0.2s;">
+            Historial
           </a>
         </li>
 

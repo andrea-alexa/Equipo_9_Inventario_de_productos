@@ -25,6 +25,9 @@ export class ListaProductosComponent implements OnInit {
   nuevaCategoria: number = 0;
   nuevaImagen: string = '';
 
+  categoriaSeleccionada: number = 0;
+  soloStockBajo: boolean = false;
+
   constructor(
     private productoService: ProductoService,
     private categoriaService: CategoriaService,
@@ -129,13 +132,12 @@ export class ListaProductosComponent implements OnInit {
     });
   }
 
-  categoriaSeleccionada: number = 0;
-
   get productosFiltrados(): Producto[] {
-    if (this.categoriaSeleccionada == 0) {
-      return this.productos;
-    }
-    return this.productos.filter(p => p.categoria_id == this.categoriaSeleccionada);
+    return this.productos.filter(p => {
+      const porCategoria = this.categoriaSeleccionada == 0 || p.categoria_id == this.categoriaSeleccionada;
+      const porStock = !this.soloStockBajo || p.stock < 5;
+      return porCategoria && porStock;
+    });
   }
 
   eliminarProducto(id: number): void {
@@ -183,42 +185,45 @@ export class ListaProductosComponent implements OnInit {
 
   actualizarStock(id: number, tipo: string): void {
     Swal.fire({
-      title: tipo === 'entrada' ? 'Entrada de stock' : 'Salida de stock',
-      text: '¿Cuántas unidades?',
-      input: 'number',
-      inputAttributes: {
-        min: '1',
-        step: '1'
-      },
-      inputValue: 1,
+      title: tipo === 'entrada' ? '▲ Entrada de stock' : '▼ Salida de stock',
+      html: `
+        <div style="text-align: left; margin-bottom: 12px;">
+          <label style="color: #a0aec0; font-size: 0.875rem; display: block; margin-bottom: 4px;">Cantidad</label>
+          <input id="swal-cantidad" type="number" min="1" step="1" value="1"
+            class="swal2-input" style="margin: 0; width: 100%;">
+        </div>
+        <div style="text-align: left;">
+          <label style="color: #a0aec0; font-size: 0.875rem; display: block; margin-bottom: 4px;">Nota (opcional)</label>
+          <input id="swal-nota" type="text" placeholder="Ej: Compra a proveedor, Venta cliente..."
+            class="swal2-input" style="margin: 0; width: 100%;">
+        </div>
+      `,
       showCancelButton: true,
       confirmButtonText: 'Confirmar',
       cancelButtonText: 'Cancelar',
       background: '#1a1d27',
       color: '#e2e8f0',
       confirmButtonColor: tipo === 'entrada' ? '#10b981' : '#ef4444',
-      cancelButtonColor: '#2d3148'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const cantidad = Number(result.value);
-        if (cantidad <= 0) {
-          Swal.fire({
-            icon: 'warning',
-            title: 'Cantidad inválida',
-            text: 'Ingresa una cantidad mayor a 0',
-            background: '#1a1d27',
-            color: '#e2e8f0',
-            confirmButtonColor: '#6366f1'
-          });
-          return;
+      cancelButtonColor: '#2d3148',
+      preConfirm: () => {
+        const cantidad = Number((document.getElementById('swal-cantidad') as HTMLInputElement).value);
+        const nota = (document.getElementById('swal-nota') as HTMLInputElement).value;
+        if (!cantidad || cantidad <= 0) {
+          Swal.showValidationMessage('Ingresa una cantidad mayor a 0');
+          return false;
         }
+        return { cantidad, nota };
+      }
+    }).then((result) => {
+      if (result.isConfirmed && result.value) {
+        const { cantidad, nota } = result.value;
 
-        this.productoService.actualizarStock(id, cantidad, tipo).subscribe({
+        this.productoService.actualizarStock(id, cantidad, tipo, nota).subscribe({
           next: () => {
             Swal.fire({
               icon: 'success',
               title: tipo === 'entrada' ? '¡Stock agregado!' : '¡Stock reducido!',
-              text: `Se ${tipo === 'entrada' ? 'agregaron' : 'redujeron'} ${cantidad} unidades correctamente`,
+              text: `Se ${tipo === 'entrada' ? 'agregaron' : 'redujeron'} ${cantidad} unidades`,
               background: '#1a1d27',
               color: '#e2e8f0',
               confirmButtonColor: '#6366f1',
@@ -241,5 +246,4 @@ export class ListaProductosComponent implements OnInit {
       }
     });
   }
-
 }

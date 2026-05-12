@@ -41,7 +41,7 @@ export class ProductoService {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 
-  actualizarStock(id: number, cantidad: number, tipo: string): Observable<Producto> {
-  return this.http.patch<Producto>(`${this.apiUrl}/${id}/stock`, { cantidad, tipo });
-}
+  actualizarStock(id: number, cantidad: number, tipo: string, nota?: string): Observable<Producto> {
+    return this.http.patch<Producto>(`${this.apiUrl}/${id}/stock`, { cantidad, tipo, nota });
+  }
 }

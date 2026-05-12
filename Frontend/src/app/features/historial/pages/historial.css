@@ -1,0 +1,12 @@
+.table {
+  background-color: transparent;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(99, 102, 241, 0.05) !important;
+}
+
+.table td, .table th {
+  border-color: transparent !important;
+  vertical-align: middle;
+}
