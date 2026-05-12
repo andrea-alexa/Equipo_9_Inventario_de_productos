@@ -2,7 +2,9 @@
   <div class="col-md-4">
 
     <div class="text-center mb-4">
-      <h1 style="color: #6366f1; font-size: 2rem;">📦</h1>
+      <div style="font-size: 2.5rem; color: #6366f1;">
+        <i class="bi bi-box-seam"></i>
+      </div>
       <h2 class="fw-bold" style="color: #e2e8f0;">Inventario</h2>
       <p style="color: #718096;">Inicia sesión para continuar</p>
     </div>
@@ -11,15 +13,26 @@
 
       <div class="mb-3">
         <label class="form-label">Email</label>
-        <input type="email" class="form-control" [(ngModel)]="email" placeholder="correo@ejemplo.com">
+        <div class="input-group">
+          <span class="input-group-text" style="background-color: #1a1d27; border-color: #2d3148; color: #a0aec0;">
+            <i class="bi bi-envelope"></i>
+          </span>
+          <input type="email" class="form-control" [(ngModel)]="email" placeholder="correo@ejemplo.com">
+        </div>
       </div>
 
       <div class="mb-4">
         <label class="form-label">Contraseña</label>
-        <input type="password" class="form-control" [(ngModel)]="password" placeholder="••••••••">
+        <div class="input-group">
+          <span class="input-group-text" style="background-color: #1a1d27; border-color: #2d3148; color: #a0aec0;">
+            <i class="bi bi-lock"></i>
+          </span>
+          <input type="password" class="form-control" [(ngModel)]="password" placeholder="••••••••">
+        </div>
       </div>
 
-      <button class="btn btn-primary w-100" (click)="iniciarSesion()" [disabled]="cargando">
+      <button class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2" (click)="iniciarSesion()" [disabled]="cargando">
+        <i class="bi bi-box-arrow-in-right"></i>
         {{ cargando ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
       </button>
 

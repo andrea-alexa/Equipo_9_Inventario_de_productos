@@ -1,7 +1,10 @@
 <div class="container py-5">
 
   <div class="mb-5">
-    <h2 class="fw-bold mb-1" style="color: #e2e8f0;">📋 Historial de Movimientos</h2>
+    <h2 class="fw-bold mb-1 d-flex align-items-center gap-2" style="color: #e2e8f0;">
+      <i class="bi bi-clock-history"></i>
+      Historial de Movimientos
+    </h2>
     <p style="color: #718096;">Registro de todas las entradas y salidas de stock</p>
   </div>
 
@@ -31,11 +34,16 @@
   <div class="card p-3 mb-4">
     <div class="row align-items-center g-3">
       <div class="col-md-6">
-        <input
-          type="text"
-          class="form-control"
-          [(ngModel)]="busqueda"
-          placeholder="🔍 Buscar por producto...">
+        <div class="input-group">
+          <span class="input-group-text" style="background-color: #1a1d27; border-color: #2d3148; color: #a0aec0;">
+            <i class="bi bi-search"></i>
+          </span>
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="busqueda"
+            placeholder="Buscar por producto...">
+        </div>
       </div>
       <div class="col-md-3">
         <select class="form-select" [(ngModel)]="filtroTipo">
@@ -45,8 +53,8 @@
         </select>
       </div>
       <div class="col-md-3 text-end">
-        <button class="btn btn-secondary" (click)="cargarHistorial()">
-          🔄 Actualizar
+        <button class="btn btn-secondary d-flex align-items-center gap-2 ms-auto" (click)="cargarHistorial()">
+          <i class="bi bi-arrow-clockwise"></i> Actualizar
         </button>
       </div>
     </div>
@@ -75,10 +83,11 @@
               <span class="fw-semibold">{{ m.producto_nombre || 'Producto eliminado' }}</span>
             </td>
             <td class="px-4 py-3">
-              <span class="badge rounded-pill px-3 py-2"
+              <span class="badge rounded-pill px-3 py-2 d-inline-flex align-items-center gap-1"
                 [style.background-color]="m.tipo === 'entrada' ? '#1a2d1a' : '#2d1a1a'"
                 [style.color]="m.tipo === 'entrada' ? '#10b981' : '#ef4444'">
-                {{ m.tipo === 'entrada' ? '▲ Entrada' : '▼ Salida' }}
+                <i [class]="m.tipo === 'entrada' ? 'bi bi-arrow-up-circle' : 'bi bi-arrow-down-circle'"></i>
+                {{ m.tipo === 'entrada' ? 'Entrada' : 'Salida' }}
               </span>
             </td>
             <td class="px-4 py-3">
@@ -88,7 +97,7 @@
             </td>
             <td class="px-4 py-3" style="color: #a0aec0;">{{ m.stock_anterior }}</td>
             <td class="px-4 py-3">
-              <span class="fw-semibold" style="color: #e2e8f0;">{{ m.stock_nuevo }}</span>
+              <span class="fw-semibold" style="color: #a0aec0;">{{ m.stock_nuevo }}</span>
             </td>
             <td class="px-4 py-3" style="color: #718096; font-size: 0.875rem;">
               {{ m.nota || '—' }}
@@ -104,7 +113,7 @@
     <!-- VACÍO -->
     <div *ngIf="movimientosFiltrados.length === 0"
       class="d-flex flex-column justify-content-center align-items-center py-5">
-      <div style="font-size: 3rem;">📋</div>
+      <div style="font-size: 3rem; color: #6366f1;"><i class="bi bi-clock-history"></i></div>
       <h5 class="mt-3" style="color: #718096;">Sin movimientos registrados</h5>
       <p style="color: #4a5568;">Los movimientos de stock aparecerán aquí</p>
     </div>

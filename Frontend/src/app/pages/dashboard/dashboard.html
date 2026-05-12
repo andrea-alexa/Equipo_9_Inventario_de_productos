@@ -15,7 +15,9 @@
             <p class="mb-1" style="color: #718096; font-size: 0.875rem;">Total Productos</p>
             <h2 class="fw-bold mb-0" style="color: #6366f1;">{{ totalProductos }}</h2>
           </div>
-          <div style="font-size: 2.5rem;">📦</div>
+          <div style="font-size: 2.5rem; color: #6366f1;">
+            <i class="bi bi-box-seam"></i>
+          </div>
         </div>
       </div>
     </div>
@@ -27,7 +29,9 @@
             <p class="mb-1" style="color: #718096; font-size: 0.875rem;">Categorías</p>
             <h2 class="fw-bold mb-0" style="color: #10b981;">{{ totalCategorias }}</h2>
           </div>
-          <div style="font-size: 2.5rem;">🏷️</div>
+          <div style="font-size: 2.5rem; color: #10b981;">
+            <i class="bi bi-tags"></i>
+          </div>
         </div>
       </div>
     </div>
@@ -40,7 +44,9 @@
             <h2 class="fw-bold mb-0" style="color: #ef4444;">{{ stockBajo }}</h2>
             <small style="color: #718096;">Menos de 5 unidades</small>
           </div>
-          <div style="font-size: 2.5rem;">⚠️</div>
+          <div style="font-size: 2.5rem; color: #ef4444;">
+            <i class="bi bi-exclamation-triangle"></i>
+          </div>
         </div>
       </div>
     </div>
@@ -51,7 +57,8 @@
   <div class="card p-4">
     <h5 class="fw-semibold mb-3" style="color: #e2e8f0;">Acciones rápidas</h5>
     <div class="d-flex gap-3">
-      <a routerLink="/productos" class="btn btn-primary px-4">
+      <a routerLink="/productos" class="btn btn-primary px-4 d-flex align-items-center gap-2">
+        <i class="bi bi-eye"></i>
         Ver Inventario
       </a>
     </div>
