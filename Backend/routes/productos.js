@@ -84,4 +84,34 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+router.patch('/:id/stock', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { cantidad, tipo } = req.body; // tipo: 'entrada' o 'salida'
+
+    const producto = await pool.query('SELECT * FROM producto WHERE id=$1', [id]);
+    if (producto.rows.length === 0)
+      return res.status(404).json({ error: 'Producto no encontrado' });
+
+    let nuevoStock = producto.rows[0].stock;
+
+    if (tipo === 'entrada') {
+      nuevoStock += cantidad;
+    } else if (tipo === 'salida') {
+      if (nuevoStock < cantidad)
+        return res.status(400).json({ error: 'Stock insuficiente' });
+      nuevoStock -= cantidad;
+    }
+
+    const result = await pool.query(
+      'UPDATE producto SET stock=$1 WHERE id=$2 RETURNING *',
+      [nuevoStock, id]
+    );
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
