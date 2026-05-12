@@ -44,6 +44,16 @@ router.post('/', async (req, res) => {
        VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
       [nombre, descripcion, precio, stock, categoria_id, imagen]
     );
+
+    // Registrar movimiento inicial si hay stock
+    if (stock > 0) {
+      await pool.query(
+        `INSERT INTO movimiento (producto_id, tipo, cantidad, stock_anterior, stock_nuevo, nota)
+         VALUES ($1, 'entrada', $2, 0, $2, 'Stock inicial al crear producto')`,
+        [result.rows[0].id, stock]
+      );
+    }
+
     res.status(201).json(result.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -73,6 +83,8 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    // Eliminar movimientos asociados primero
+    await pool.query('DELETE FROM movimiento WHERE producto_id=$1', [id]);
     const result = await pool.query(
       'DELETE FROM producto WHERE id=$1 RETURNING *', [id]
     );
@@ -84,28 +96,39 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// PATCH /productos/:id/stock - entrada o salida de stock
 router.patch('/:id/stock', async (req, res) => {
   try {
     const { id } = req.params;
-    const { cantidad, tipo } = req.body; // tipo: 'entrada' o 'salida'
+    const { cantidad, tipo, nota } = req.body; // tipo: 'entrada' o 'salida'
 
     const producto = await pool.query('SELECT * FROM producto WHERE id=$1', [id]);
     if (producto.rows.length === 0)
       return res.status(404).json({ error: 'Producto no encontrado' });
 
-    let nuevoStock = producto.rows[0].stock;
+    const stockAnterior = producto.rows[0].stock;
+    let nuevoStock = stockAnterior;
 
     if (tipo === 'entrada') {
       nuevoStock += cantidad;
     } else if (tipo === 'salida') {
-      if (nuevoStock < cantidad)
+      if (stockAnterior < cantidad)
         return res.status(400).json({ error: 'Stock insuficiente' });
       nuevoStock -= cantidad;
+    } else {
+      return res.status(400).json({ error: 'Tipo inválido. Use "entrada" o "salida"' });
     }
 
     const result = await pool.query(
       'UPDATE producto SET stock=$1 WHERE id=$2 RETURNING *',
       [nuevoStock, id]
+    );
+
+    // Registrar en historial
+    await pool.query(
+      `INSERT INTO movimiento (producto_id, tipo, cantidad, stock_anterior, stock_nuevo, nota)
+       VALUES ($1, $2, $3, $4, $5, $6)`,
+      [id, tipo, cantidad, stockAnterior, nuevoStock, nota || null]
     );
 
     res.json(result.rows[0]);
