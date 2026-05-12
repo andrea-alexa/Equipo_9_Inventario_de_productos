@@ -129,6 +129,15 @@ export class ListaProductosComponent implements OnInit {
     });
   }
 
+  categoriaSeleccionada: number = 0;
+
+  get productosFiltrados(): Producto[] {
+    if (this.categoriaSeleccionada == 0) {
+      return this.productos;
+    }
+    return this.productos.filter(p => p.categoria_id == this.categoriaSeleccionada);
+  }
+
   eliminarProducto(id: number): void {
     Swal.fire({
       title: '¿Estás seguro?',
@@ -171,4 +180,66 @@ export class ListaProductosComponent implements OnInit {
       }
     });
   }
+
+  actualizarStock(id: number, tipo: string): void {
+    Swal.fire({
+      title: tipo === 'entrada' ? 'Entrada de stock' : 'Salida de stock',
+      text: '¿Cuántas unidades?',
+      input: 'number',
+      inputAttributes: {
+        min: '1',
+        step: '1'
+      },
+      inputValue: 1,
+      showCancelButton: true,
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: 'Cancelar',
+      background: '#1a1d27',
+      color: '#e2e8f0',
+      confirmButtonColor: tipo === 'entrada' ? '#10b981' : '#ef4444',
+      cancelButtonColor: '#2d3148'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const cantidad = Number(result.value);
+        if (cantidad <= 0) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Cantidad inválida',
+            text: 'Ingresa una cantidad mayor a 0',
+            background: '#1a1d27',
+            color: '#e2e8f0',
+            confirmButtonColor: '#6366f1'
+          });
+          return;
+        }
+
+        this.productoService.actualizarStock(id, cantidad, tipo).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: tipo === 'entrada' ? '¡Stock agregado!' : '¡Stock reducido!',
+              text: `Se ${tipo === 'entrada' ? 'agregaron' : 'redujeron'} ${cantidad} unidades correctamente`,
+              background: '#1a1d27',
+              color: '#e2e8f0',
+              confirmButtonColor: '#6366f1',
+              timer: 2000,
+              showConfirmButton: false
+            });
+            this.cargarProductos();
+          },
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: err.error?.error || 'No se pudo actualizar el stock',
+              background: '#1a1d27',
+              color: '#e2e8f0',
+              confirmButtonColor: '#6366f1'
+            });
+          }
+        });
+      }
+    });
+  }
+
 }
