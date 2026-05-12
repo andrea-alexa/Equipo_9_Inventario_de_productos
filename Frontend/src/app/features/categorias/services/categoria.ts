@@ -11,7 +11,7 @@ export interface Categoria {
   providedIn: 'root'
 })
 export class CategoriaService {
-  private apiUrl = 'http://localhost:3000/categorias';
+  private apiUrl = 'https://inventario-backend-3q1w.onrender.com/categorias';
 
   constructor(private http: HttpClient) {}
 

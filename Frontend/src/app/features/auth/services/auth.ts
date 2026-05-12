@@ -11,7 +11,7 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/auth';
+  private apiUrl = 'https://inventario-backend-3q1w.onrender.com/auth';
 
   constructor(private http: HttpClient) {}
 
